@@ -1,0 +1,4 @@
+111 Clinico_Geral ativo
+222 Dentista ATIVO
+333 Pediatra ativo
+101 Ortopedista Ativo
