@@ -1,101 +1,100 @@
 #include<stdlib.h>
 #include<stdio.h>
 
-struct bin_tree {
+struct Arvore {
 int data;
-struct bin_tree * right, * left;
+struct Arvore * direita, * esquerda;
 };
-typedef struct bin_tree node;
 
-void insert(node ** tree, int val)
+void insert(Arvore ** raiz, int val)
 {
-    node *temp = NULL;
-    if(!(*tree))
+    Arvore *temp = NULL;
+    if(!(*raiz))
     {
-        temp = (node *)malloc(sizeof(node));
-        temp->left = temp->right = NULL;
+        temp = (Arvore *)malloc(sizeof(Arvore));
+        temp->esquerda = temp->direita = NULL;
         temp->data = val;
-        *tree = temp;
+        *raiz = temp;
         return;
     }
 
-    if(val < (*tree)->data)
+    if(val < (*raiz)->data)
     {
-        insert(&(*tree)->left, val);
+        insert(&(*raiz)->esquerda, val);
     }
-    else if(val > (*tree)->data)
+    else if(val > (*raiz)->data)
     {
-        insert(&(*tree)->right, val);
-    }
-
-}
-
-void print_preorder(node * tree)
-{
-    if (tree)
-    {
-        printf("%d\n",tree->data);
-        print_preorder(tree->left);
-        print_preorder(tree->right);
+        insert(&(*raiz)->direita, val);
     }
 
 }
 
-void print_inorder(node * tree)
+void print_preorder(Arvore *raiz)
 {
-    if (tree)
+    if (raiz)
     {
-        print_inorder(tree->left);
-        printf("%d\n",tree->data);
-        print_inorder(tree->right);
+        printf("%d\n",raiz->data);
+        print_preorder(raiz->esquerda);
+        print_preorder(raiz->direita);
+    }
+
+}
+
+void print_inorder(Arvore *raiz)
+{
+    if (raiz)
+    {
+        print_inorder(raiz->esquerda);
+        printf("%d\n",raiz->data);
+        print_inorder(raiz->direita);
     }
 }
 
-void print_postorder(node * tree)
+void print_postorder(Arvore *raiz)
 {
-    if (tree)
+    if (raiz)
     {
-        print_postorder(tree->left);
-        print_postorder(tree->right);
-        printf("%d\n",tree->data);
+        print_postorder(raiz->esquerda);
+        print_postorder(raiz->direita);
+        printf("%d\n",raiz->data);
     }
 }
 
-void deltree(node * tree)
+void deltree(Arvore *raiz)
 {
-    if (tree)
+    if (raiz)
     {
-        deltree(tree->left);
-        deltree(tree->right);
-        free(tree);
+        deltree(raiz->esquerda);
+        deltree(raiz->direita);
+        free(raiz);
     }
 }
 
-node* search(node ** tree, int val)
+Arvore* search(Arvore ** raiz, int val)
 {
-    if(!(*tree))
+    if(!(*raiz))
     {
         return NULL;
     }
 
-    if(val < (*tree)->data)
+    if(val < (*raiz)->data)
     {
-        search(&((*tree)->left), val);
+        search(&((*raiz)->esquerda), val);
     }
-    else if(val > (*tree)->data)
+    else if(val > (*raiz)->data)
     {
-        search(&((*tree)->right), val);
+        search(&((*raiz)->direita), val);
     }
-    else if(val == (*tree)->data)
+    else if(val == (*raiz)->data)
     {
-        return *tree;
+        return *raiz;
     }
 }
 
 int main()
 {
-    node *root;
-    node *tmp;
+    Arvore *root;
+    Arvore *tmp;
     //int i;
 
     root = NULL;
