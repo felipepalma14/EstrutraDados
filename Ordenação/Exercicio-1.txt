@@ -1,0 +1,13 @@
+	Usar o metodo de ordenação por seleção
+para classificar em ordem decrescentede notas
+os candidatos a vagas de um concurso publico.
+Solicitar ao usuario a nota de corte.
+
+
+Para proxima terça:
+	Acrescentar ao programa anterior
+as seguintes especificações:
+	- Ler um arquivo de texto contendo
+N candidatos (N de inscricao, cpf, nome,nota)
+e carregar na lista
+	- ordernar por metodo de selecao e inserção;
