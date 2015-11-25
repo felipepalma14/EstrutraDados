@@ -47,19 +47,8 @@ void inserirCandidato(TipoListaCandidato *pLista){
 	Candidato *novoNodo = new Candidato;
 	
 	
-	printf("Digite nome: ");
-	fflush(stdin);
-	gets(nome);
-	
-	printf("Digite cpf: ");
-	fflush(stdin);
-	gets(cpf);
-	
 	printf("Digite nota: ");
 	scanf("%d",&novoNodo->nota);
-	
-	strcpy(novoNodo->cpf,cpf);
-	strcpy(novoNodo->nome,nome);
 	
 	novoNodo->proximo = NULL;
 
@@ -76,82 +65,21 @@ void inserirCandidato(TipoListaCandidato *pLista){
 
 TipoListaCandidato ordenado;
 
-/*
-void ordena(TipoListaCandidato *pLista){
-	Candidato *aux = pLista->inicio,*aux2;
-	int minimo,tempNota; 
-	if(aux==NULL || aux->proximo == NULL){
-		printf("Lista Vazia");
-	}else{
-		while(aux !=NULL){
-			minimo = aux;
-			aux2 = aux;
-			while(aux2->proximo){
-				if(aux2->nota > minimo){
-					aux2->nota = minimo;
-				}
-				aux2 = aux2->proximo;
-			}
-			tempNota = aux->nota;
-			aux->nota = minimo;
-			minimo = tempNota;
-			aux= aux->proximo; 
-		}
-	}
-}
-
 
 void ordena(TipoListaCandidato *pLista){
 	Candidato *aux = pLista->inicio;
-	for(;*aux != NULL;*aux = (*aux)->proximo){
-			Candidato *minimo = aux;
+	Candidato *minimo;
+	for(;aux != NULL;aux = aux->proximo){
+			Candidato *analisado = aux;
 			for(Candidato *j = aux->proximo;j !=NULL; j = j->proximo){
-				if(j->nota > minimo->nota){
-					minimo = j;
-				}
-			}
-			Candidato *tmp = aux;
-			aux = minimo;
-			tmp->proximo = aux->proximo;
-			minimo->proximo = tmp;
+				
 		}
-}
-
-*/
-
-void SelectionSort(TipoListaCandidato *pLista)
-{
-	Candidato *start = pLista->inicio;
-	Candidato *traverse;
-	Candidato *min;
-	
-	while(start->proximo)
-	{
-		min = start;
-		traverse = start->proximo;
-		
-		while(traverse)
-		{
-			/* Find minimum element from array */ 
-			if( min->nota > traverse->nota )
-			{
-				min = traverse;
-			}
 			
-			traverse = traverse->proximo;
-		}
-		swap(start,min);			// Put minimum element on starting location
-		start = start->proximo;
-	}
-} 
- 
-/* swap data field of linked list */
-void swap(Candidato *p1, Candidato *p2)
-{
-	Candidato *temp = p1;
-	p1 = p2;
-	p2 = temp;
+		
 }
+
+
+
 
 void imprimirCandidatos(TipoListaCandidato *pLista){
 	Candidato *aux = pLista->inicio;
@@ -161,15 +89,37 @@ void imprimirCandidatos(TipoListaCandidato *pLista){
 		return;
 	}
 		while(aux!=NULL){
-			printf("Nome: %s ",aux->nome);
-			printf("CPF: %s ",aux->cpf);
 			printf("Nota: %d\n",aux->nota);
 			aux = aux->proximo;
 		}
 		system("pause");
 }
 
+void SelectionSort(TipoListaCandidato *pLista)
+{
+	Candidato *atual = pLista->inicio, *min,*seguinte,*temp;
+	
+	for(;atual!= NULL; atual = atual->proximo){
+		min = atual;
+		for(seguinte = atual->proximo;seguinte !=NULL;seguinte = seguinte->proximo){
+			if(seguinte->nota < min->nota){
+				min = seguinte;
+			}
+		}
+		temp = atual;
+		atual = min;
+		min = temp;
+	}
 
+} 
+ 
+/* swap data field of linked list */
+void swap(Candidato *p1, Candidato *p2)
+{
+	Candidato *temp = p1;
+	p1 = p2;
+	p2 = temp;
+}
 
 int main(void){
 	
@@ -204,8 +154,7 @@ int main(void){
 				imprimirCandidatos(&lista);
 				break;
 			case 3:
-				//ordena(&lista);
-				SelectionSort(&lista);
+				ordena(&lista);
 				imprimirCandidatos(&lista);
 				break;
 			case 4:

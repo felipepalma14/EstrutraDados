@@ -19,7 +19,7 @@ void ordenacaoPorSelecao(int notas[],int tamanho){
 }
 
 int main(){
-	int notas[3] = {3,2,1};
+	int notas[3] = {3,4,1};
 	ordenacaoPorSelecao(notas,3);
 	int k;
 	for(k=0;k<3;k++){

@@ -1,31 +1,76 @@
-#include<stdlib.h>
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <windows.h>
 
-struct Arvore {
-int data;
-struct Arvore * direita, * esquerda;
+
+struct Dicionario{
+	char palavra[200];
+	struct Dicionario *proximo;
 };
 
-void insert(Arvore ** raiz, int val)
+struct Arvore {
+	char letra;
+	struct Dicionario *inicio;
+	struct Arvore * direita, * esquerda;
+};
+
+//DECLARACOES DAS FUNCOES
+
+Arvore* search(Arvore ** raiz, char letra);
+void imprimirPalavras(Dicionario *dicionario);
+
+
+void insert(Arvore ** raiz, char letra,char palavra[200])
 {
+	Arvore *hasLetraRaiz = search(&(*raiz),letra);
+	letra = toupper(letra);
     Arvore *temp = NULL;
-    if(!(*raiz))
-    {
+    Dicionario *dictTemp = NULL;
+    
+    if(!(*raiz)){
         temp = (Arvore *)malloc(sizeof(Arvore));
         temp->esquerda = temp->direita = NULL;
-        temp->data = val;
+        temp->letra = letra;
+        
+        dictTemp = (Dicionario*)malloc(sizeof(Dicionario));
+		strcpy(dictTemp->palavra,palavra);
+		dictTemp->proximo = NULL;
+        temp->inicio = dictTemp;
         *raiz = temp;
-        return;
-    }
-
-    if(val < (*raiz)->data)
-    {
-        insert(&(*raiz)->esquerda, val);
-    }
-    else if(val > (*raiz)->data)
-    {
-        insert(&(*raiz)->direita, val);
-    }
+        
+		return;
+    }else{
+		 if(hasLetraRaiz != NULL){
+			printf("Raiz com letra semelhante\n");
+			
+			
+			dictTemp = hasLetraRaiz->inicio;
+			while(dictTemp->proximo!=NULL){
+				dictTemp= dictTemp->proximo;
+			}	
+			dictTemp->proximo = (Dicionario*)malloc(sizeof(Dicionario));
+	        dictTemp = dictTemp->proximo;
+	        strcpy(dictTemp->palavra,palavra);
+	        dictTemp->proximo = NULL;
+			
+			printf("%s\n",dictTemp->palavra);
+		}else{
+				
+		    if(letra <= (*raiz)->letra)
+		    {
+		        insert(&(*raiz)->esquerda, letra,palavra);
+		    }
+		    else if(letra >= (*raiz)->letra)  
+			{
+		        insert(&(*raiz)->direita,letra,palavra);
+		        
+		    }
+		}
+	}
 
 }
 
@@ -33,7 +78,7 @@ void print_preorder(Arvore *raiz)
 {
     if (raiz)
     {
-        printf("%d\n",raiz->data);
+        printf("%c\n",raiz->letra);
         print_preorder(raiz->esquerda);
         print_preorder(raiz->direita);
     }
@@ -45,7 +90,7 @@ void print_inorder(Arvore *raiz)
     if (raiz)
     {
         print_inorder(raiz->esquerda);
-        printf("%d\n",raiz->data);
+        printf("%c\n",raiz->letra);
         print_inorder(raiz->direita);
     }
 }
@@ -56,7 +101,7 @@ void print_postorder(Arvore *raiz)
     {
         print_postorder(raiz->esquerda);
         print_postorder(raiz->direita);
-        printf("%d\n",raiz->data);
+        printf("%c\n",raiz->letra);
     }
 }
 
@@ -70,25 +115,34 @@ void deltree(Arvore *raiz)
     }
 }
 
-Arvore* search(Arvore ** raiz, int val)
+Arvore* search(Arvore ** raiz, char letra)
 {
+	letra = toupper(letra);
     if(!(*raiz))
     {
         return NULL;
     }
-
-    if(val < (*raiz)->data)
+	
+    if(letra < (*raiz)->letra)
     {
-        search(&((*raiz)->esquerda), val);
+        search(&((*raiz)->esquerda), letra);
     }
-    else if(val > (*raiz)->data)
+    else if(letra > (*raiz)->letra)
     {
-        search(&((*raiz)->direita), val);
+        search(&((*raiz)->direita), letra);
     }
-    else if(val == (*raiz)->data)
+    else if(letra == (*raiz)->letra)
     {
         return *raiz;
     }
+}
+
+void imprimirPalavras(Dicionario *dicionario){
+	while(dicionario!=NULL){
+		printf("%s\n",dicionario->palavra);
+		dicionario = dicionario->proximo;
+	}
+	system("pause");
 }
 
 int main()
@@ -96,36 +150,35 @@ int main()
     Arvore *root;
     Arvore *tmp;
     //int i;
-
     root = NULL;
     /* Inserting nodes into tree */
-    insert(&root, 9);
-    insert(&root, 4);
-    insert(&root, 15);
-    insert(&root, 6);
-    insert(&root, 12);
-    insert(&root, 17);
-    insert(&root, 2);
-
-    /* Printing nodes of tree */
-    printf("Pre Order Display\n");
+    insert(&root, 'f',"felipe");
+    insert(&root, 'g',"gato");
+	insert(&root, 'p',"pato");
+	insert(&root, 'p',"prato");
+	insert(&root, 'p',"pagapaio");
+	insert(&root, 'a',"abelha");
+	
+	
+    printf("Pre Central\n");
     print_preorder(root);
 
-    printf("In Order Display\n");
+    printf("Central\n");
     print_inorder(root);
 
-    printf("Post Order Display\n");
+    printf("Pos Central\n");
     print_postorder(root);
 
     /* Search node into tree */
-    tmp = search(&root, 4);
+    tmp = search(&root, 'a');
     if (tmp)
     {
-        printf("Searched node=%d\n", tmp->data);
+        printf("Resultado do Nodo Pesquisado = %c\n", tmp->letra);
+        imprimirPalavras(tmp->inicio);
     }
     else
     {
-        printf("Data Not found in tree.\n");
+        printf("Nennhum dado encontra.\n");
     }
 
     /* Deleting all nodes of tree */
